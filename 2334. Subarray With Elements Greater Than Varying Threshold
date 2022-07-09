@@ -19,3 +19,18 @@ class Solution:
                 x, y = y, x
             parent[x] = y
             sz[y] += sz[x]
+
+        x = [(nums[i], i) for i in range(n)]
+        x.sort(reverse=True)
+        s = set()
+        for e, i in x:
+            s.add(i)
+            if i-1 in s:
+                join(i-1, i)
+            if i+1 in s:
+                join(i, i+1)
+            cur = sz[root(i)]
+            if threshold < e*cur:
+                return cur
+        return -1
+
