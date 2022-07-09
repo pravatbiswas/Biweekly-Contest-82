@@ -1,0 +1,20 @@
+class Solution:
+    def minSumSquareDiff(self, a: List[int], b: List[int], k1: int, k2: int) -> int:
+        n = len(a)
+        c = [abs(a[i] - b[i]) for i in range(n)]
+        m = k1 + k2
+        c.sort(reverse=True)
+        if sum(c) <= m:
+            return 0
+        c.append(0)
+        for i in range(n):
+            if (c[i] - c[i + 1]) * (i + 1) <= m:
+                m -= (c[i] - c[i + 1]) * (i + 1)
+            else:
+                d = m // (i + 1)
+                e = m % (i + 1)
+                z = e * (c[i] - d - 1) ** 2 + (i + 1 - e) * (c[i] - d) ** 2
+                for j in range(i + 1, n):
+                    z += c[j] ** 2
+                break            
+        return z
