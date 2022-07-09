@@ -1,0 +1,39 @@
+class Solution:
+    def latestTimeCatchTheBus(self, a: List[int], b: List[int], c: int) -> int:
+        d = []
+        z = set()
+        v = set()
+        for i in a:
+            d.append((i, 2))
+            z.add(i)
+        for i in b:
+            v.add(i)
+            z.add(i - 1)
+            d.append((i, 0))
+        z = [i for i in z if i not in v]
+        z.sort()
+        def ok(p):
+            e = d.copy()
+            e.append((p, 1))
+            e.sort()
+            q = deque()
+            for x, y in e:
+                if y == 0 or y == 1:
+                    q.append(y)
+                else:
+                    for i in range(c):
+                        if q:
+                            if q.popleft() == 1:
+                                return True
+                        else:
+                            break
+            return False
+        L = 0
+        R = len(z)
+        while L < R - 1:
+            M = (L + R) // 2
+            if ok(z[M]):
+                L = M
+            else:
+                R = M
+        return z[L]
