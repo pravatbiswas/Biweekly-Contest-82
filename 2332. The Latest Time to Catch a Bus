@@ -1,39 +1,22 @@
 class Solution:
-    def latestTimeCatchTheBus(self, a: List[int], b: List[int], c: int) -> int:
-        d = []
-        z = set()
-        v = set()
-        for i in a:
-            d.append((i, 2))
-            z.add(i)
-        for i in b:
-            v.add(i)
-            z.add(i - 1)
-            d.append((i, 0))
-        z = [i for i in z if i not in v]
-        z.sort()
-        def ok(p):
-            e = d.copy()
-            e.append((p, 1))
-            e.sort()
-            q = deque()
-            for x, y in e:
-                if y == 0 or y == 1:
-                    q.append(y)
-                else:
-                    for i in range(c):
-                        if q:
-                            if q.popleft() == 1:
-                                return True
-                        else:
-                            break
-            return False
-        L = 0
-        R = len(z)
-        while L < R - 1:
-            M = (L + R) // 2
-            if ok(z[M]):
-                L = M
-            else:
-                R = M
-        return z[L]
+    def latestTimeCatchTheBus(self, buses: List[int], passengers: List[int], capacity: int) -> int:
+        passengers.sort(reverse=True)
+        buses.sort()
+        last = -10**18
+        bef = -10**18
+        for bus in buses:
+            l = []
+            cur = 0
+            while passengers and passengers[-1] <= bus and cur < capacity:
+                cur += 1
+                l.append(passengers.pop())
+
+            s = set(l)
+            res = min(bus, passengers[-1] if passengers else 10**18) if len(l) < capacity else l[capacity-1]
+            while res in s:
+                res -= 1
+            if res > bef:
+                last = max(last, res)
+            if l:
+                bef = l[-1]
+        return last
